@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "declaration": true,
+     "esModuleInterop": true, // 确保可以兼容 ES 模块导入
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "strictPropertyInitialization": false,
+    "paths": {
+      "mongoose": ["./node_modules/mongoose"]
+    }
+  },
+  "include": [
+    "src/**/*" // 包括 src 文件夹中的所有 TypeScript 文件
+  ],
+  "exclude": [
+    "node_modules", // 排除 node_modules 文件夹
+    "dist" // 排除 dist 输出文件夹
+  ]
+}

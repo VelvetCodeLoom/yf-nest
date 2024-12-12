@@ -1,0 +1,18 @@
+# 主文件夹路径为 /Users/liuxuechao/global/vanBlogData
+database:
+  # 数据库连接
+  url: mongodb://127.0.0.1:27017/vanBlog?authSource=admin
+static:
+  # 图床等静态文件保存的位置
+  path: /Users/liuxuechao/global/vanBlogData/static
+# 是否开启演示站模式，会限制很多权限
+demo: 'false'
+# waline 用的表名，会自动创建
+waline:
+  db: waline
+# 日志位置
+log: /Users/liuxuechao/global/vanBlogData/logs
+codeRunner:
+  path: /Users/liuxuechao/global/vanBlogData/codeRunner
+pluginRunner:
+  path: /Users/liuxuechao/global/vanBlogData/pluginRunner
