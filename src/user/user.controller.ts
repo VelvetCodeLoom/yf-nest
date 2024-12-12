@@ -16,7 +16,7 @@ import * as XLSX from 'xlsx';
 import { Response } from 'express'; // 引入 express 的 Response 类型
 import { UserService } from './user.service';
 
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto, FindUsersQuery } from './user.dto';
 // 在控制器顶部添加 ApiTags
 @ApiTags('Users')
 @Controller('users')
@@ -35,16 +35,20 @@ export class UserController {
       msg: '用户已成功创建，欢迎使用',
     };
   }
-  @Get('list')
+  @Post('list')
   @ApiOperation({ summary: '获取所有用户' })
-  async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-    @Query('name') name?: string,
-    @Query('phone') phone?: string,
-    @Query('appointmentDate') appointmentDate?: string,
-    @Query('isArrived') isArrived?: number,
-  ) {
+  async findAll(@Body() query: FindUsersQuery) {
+    const {
+      page = 1,
+      limit = 10,
+      name,
+      phone,
+      appointmentDate,
+      isArrived,
+      isTransferred,
+      isReceived,
+    } = query;
+
     // 构建查询条件
     const filter: any = {};
 
@@ -59,17 +63,28 @@ export class UserController {
     if (appointmentDate) {
       const startOfDay = moment(appointmentDate).startOf('day').format('YYYY-MM-DD HH:mm:ss');
       const endOfDay = moment(appointmentDate).endOf('day').format('YYYY-MM-DD HH:mm:ss');
-
       filter.appointmentDate = { $gte: startOfDay, $lte: endOfDay };
     }
 
     if (isArrived) {
-      filter.isArrived = isArrived; // 添加对 isArrived 的过滤
+      filter.isArrived = isArrived;
+    } else if (isArrived === 0) {
+      filter.isArrived = isArrived;
     }
+    if (isTransferred) {
+      filter.isTransferred = isTransferred;
+    } else if (isTransferred === 0) {
+      filter.isTransferred = isTransferred;
+    }
+    if (isReceived) {
+      filter.isReceived = isReceived;
+    } else if (isReceived === 0) {
+      filter.isReceived = isReceived;
+    }
+
     const users = await this.userService.findAll(page, limit, filter);
 
     const total = await this.userService.countUsers(filter);
-
     const totalPages = Math.ceil(total / limit);
 
     return {
@@ -84,7 +99,6 @@ export class UserController {
       },
     };
   }
-
   // 更新用户
   @Post('update')
   @ApiOperation({ summary: '批量更新用户' })

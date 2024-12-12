@@ -121,3 +121,39 @@ export class UpdateUserDto {
   @IsOptional()
   remark?: string;
 }
+export class FindUsersQuery {
+  @ApiProperty({ description: '当前页', example: 1 })
+  @IsInt()
+  page: number;
+
+  @ApiProperty({ description: '每页数量', example: 10 })
+  @IsInt()
+  limit: number;
+
+  @ApiProperty({ description: '用户名' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty({ description: '电话号码' })
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @ApiProperty({ description: '预约日期' })
+  @IsOptional()
+  @IsString()
+  appointmentDate?: string;
+
+  @ApiProperty({ description: '是否到店 (0: 否, 1: 是)', example: 0 })
+  @IsOptional()
+  isArrived?: number | string;
+
+  @ApiProperty({ description: '是否转账 (0: 否, 1: 是)', example: 0 })
+  @IsOptional()
+  isTransferred?: number | string;
+
+  @ApiProperty({ description: '是否领取 (0: 否, 1: 是)', example: 0 })
+  @IsOptional()
+  isReceived?: number | string;
+}
