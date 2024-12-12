@@ -1,28 +1,28 @@
 import { IsString, IsInt, IsNotEmpty, IsOptional, Matches } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger'; // 引入 Swagger 注解
+import { ApiProperty } from '@nestjs/swagger';
 
 // 创建用户 DTO
 export class CreateUserDto {
-  @ApiProperty({ description: '用户名', example: 'JohnDoe' }) // 添加描述
+  @ApiProperty({ description: '用户名', example: 'JohnDoe' })
   @IsString({ message: '用户名必须是字符串' })
   @IsNotEmpty({ message: '用户名是必填项' })
   name: string;
 
-  @ApiProperty({ description: '微信名', example: 'John_WeChat', required: false }) // 添加描述并设置为可选
+  @ApiProperty({ description: '微信名', example: 'John_WeChat', required: false })
   @IsString({ message: '微信名必须是字符串' })
   @IsOptional()
   weChatName?: string;
 
-  @ApiProperty({ description: '年龄', example: 30, required: false }) // 添加描述并设置为可选
+  @ApiProperty({ description: '年龄', example: 30, required: false })
   @IsOptional()
   age?: number;
 
-  @ApiProperty({ description: '地址', example: '某街道, 某城市', required: false }) // 添加描述并设置为可选
+  @ApiProperty({ description: '地址', example: '某街道, 某城市', required: false })
   @IsString({ message: '地址必须是字符串' })
   @IsOptional()
   address?: string;
 
-  @ApiProperty({ description: '电话号码', example: '1234567890', required: false }) // 添加描述并设置为可选
+  @ApiProperty({ description: '电话号码', example: '1234567890', required: false })
   @IsString({ message: '电话号码必须是字符串' })
   @IsOptional()
   phone?: string;
@@ -53,6 +53,10 @@ export class CreateUserDto {
   @ApiProperty({ description: '领取金额', example: 100, required: false })
   @IsOptional()
   receivedAmount?: number;
+
+  @ApiProperty({ description: '备注', example: '备注信息', required: false })
+  @IsOptional()
+  remark?: string;
 }
 
 // 更新用户 DTO
@@ -112,4 +116,8 @@ export class UpdateUserDto {
   @ApiProperty({ description: '用户ID', example: '12345' }) // 为 ID 添加描述
   @IsString({ message: 'id 是必填字段' })
   id: string;
+
+  @ApiProperty({ description: '备注', example: '备注信息', required: false })
+  @IsOptional()
+  remark?: string;
 }

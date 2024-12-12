@@ -7,7 +7,7 @@ export class User extends Document {
   name: string;
 
   @Prop({ required: false, description: '微信名' })
-  weChatName: string; // 微信名
+  weChatName: string;
 
   @Prop({ required: false, description: '年龄' })
   age: number;
@@ -33,7 +33,9 @@ export class User extends Document {
   isReceived: number; // 0: 否, 1: 是
 
   @Prop({ type: Number, default: null, description: '领取金额' })
-  receivedAmount: number | null; // 领取金额
+  receivedAmount: number | null;
+  @Prop({ required: false, description: '备注' })
+  remark: string; // 备注
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
