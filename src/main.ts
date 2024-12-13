@@ -10,8 +10,11 @@ import { json } from 'express';
 import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
-
+import { InitProvider } from './provider/init/init.provider';
+import { initJwt } from './utils/initJwt';
 async function bootstrap() {
+  const jwtSecret = await initJwt();
+  global.jwtSecret = jwtSecret;
   const port = 3000;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(json({ limit: '50mb' }));
@@ -53,7 +56,9 @@ async function bootstrap() {
   // 注册全局响应拦截器
   app.useGlobalInterceptors(new ResponseInterceptor());
   await app.listen(port);
-
+  const initProvider = app.get(InitProvider);
+  initProvider.initVersion();
+  initProvider.initRestoreKey();
   // 启动日志
   setTimeout(() => {
     LoggerService.log('appStart', {

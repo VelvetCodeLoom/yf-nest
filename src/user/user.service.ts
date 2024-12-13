@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { User } from '../scheme/user.schema';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import moment from 'moment';
-
+import { makeSalt, encryptPassword } from 'src/utils/crypto';
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
@@ -24,6 +24,7 @@ export class UserService {
 
     return fieldMap;
   }
+
   // 创建用户方法
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {

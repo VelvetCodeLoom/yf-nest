@@ -1,7 +1,7 @@
 # 主文件夹路径为 /Users/liuxuechao/global/vanBlogData
 database:
   # 数据库连接
-  url: mongodb://127.0.0.1:27017/vanBlog?authSource=admin
+  url: mongodb://127.0.0.1:27017/MnMongo?authSource=admin
 static:
   # 图床等静态文件保存的位置
   path: /Users/liuxuechao/global/vanBlogData/static

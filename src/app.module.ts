@@ -6,7 +6,16 @@ import { config } from './config/index';
 import { User, UserSchema } from './scheme/user.schema';
 import { Token, TokenSchema } from './scheme/token.schema';
 import { UserModule } from './user/user.module';
-
+import { TokenProvider } from './provider/token/token.provider';
+import { SettingProvider } from './provider/setting/setting.provider';
+import { Setting, SettingSchema } from './scheme/setting.schema';
+import { AuthProvider } from './provider/auth/auth.provider';
+import { CacheProvider } from './provider/cache/cache.provider';
+import { LogProvider } from './provider/log/log.provider';
+import { TokenController } from './controller/admin/token/token.controller';
+import { InitProvider } from './provider/init/init.provider';
+import { JwtModule } from '@nestjs/jwt';
+import { initJwt } from './utils/initJwt';
 @Module({
   imports: [
     MongooseModule.forRoot(config.mongoUrl, {
@@ -14,11 +23,30 @@ import { UserModule } from './user/user.module';
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
+      { name: Setting.name, schema: SettingSchema },
       { name: Token.name, schema: TokenSchema },
     ]),
     UserModule,
+    JwtModule.registerAsync({
+      useFactory: async () => {
+        return {
+          secret: await initJwt(),
+          signOptions: {
+            expiresIn: 3600 * 24 * 7,
+          },
+        };
+      },
+    }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, TokenController],
+  providers: [
+    AppService,
+    TokenProvider,
+    SettingProvider,
+    AuthProvider,
+    LogProvider,
+    CacheProvider,
+    InitProvider,
+  ],
 })
 export class AppModule {}
