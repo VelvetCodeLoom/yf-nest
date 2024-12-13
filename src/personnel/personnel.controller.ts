@@ -13,31 +13,29 @@ import {
 import moment from 'moment';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import * as XLSX from 'xlsx';
-import { Response } from 'express'; // 引入 express 的 Response 类型
-import { UserService } from './user.service';
-
-import { CreateUserDto, UpdateUserDto, FindUsersQuery } from './user.dto';
-// 在控制器顶部添加 ApiTags
-@ApiTags('Users')
-@Controller('users')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
-
+import { Response } from 'express';
+import { PersonnelService } from './personnel.service';
+import { CreatePersonnelDto, UpdatePersonnelDto, FindPersonnelQuery } from './personnel.dto';
+@ApiTags('personnel')
+@Controller('personnel')
+export class PersonnelController {
+  constructor(private readonly personnelService: PersonnelService) {}
   @Post('add')
   @HttpCode(200)
   @ApiOperation({ summary: '创建用户' })
-  async create(@Body() createUserDto: CreateUserDto) {
-    await this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreatePersonnelDto) {
+    await this.personnelService.create(createUserDto);
 
     // 在 Controller 层处理自定义响应
     return {
       code: 200,
-      msg: '用户已成功创建，欢迎使用',
+      msg: '用户已创建成功',
     };
   }
   @Post('list')
+  @HttpCode(200)
   @ApiOperation({ summary: '获取所有用户' })
-  async findAll(@Body() query: FindUsersQuery) {
+  async findAll(@Body() query: FindPersonnelQuery) {
     const {
       page = 1,
       limit = 10,
@@ -82,9 +80,9 @@ export class UserController {
       filter.isReceived = isReceived;
     }
 
-    const users = await this.userService.findAll(page, limit, filter);
+    const users = await this.personnelService.findAll(page, limit, filter);
 
-    const total = await this.userService.countUsers(filter);
+    const total = await this.personnelService.countUsers(filter);
     const totalPages = Math.ceil(total / limit);
 
     return {
@@ -102,8 +100,8 @@ export class UserController {
   // 更新用户
   @Post('update')
   @ApiOperation({ summary: '批量更新用户' })
-  async updateBatch(@Body() UpdateUserDto: UpdateUserDto) {
-    const updatedUsers = await this.userService.updateUser(UpdateUserDto);
+  async updateBatch(@Body() UpdateUserDto: UpdatePersonnelDto) {
+    const updatedUsers = await this.personnelService.updateUser(UpdateUserDto);
 
     // 返回自定义响应格式
     return {
@@ -117,7 +115,7 @@ export class UserController {
   @ApiOperation({ summary: '根据 id 删除用户' })
   async remove(@Query('id') id: string) {
     // 调用服务层的删除方法，获取删除的用户信息
-    const deletedUser = await this.userService.remove(id);
+    const deletedUser = await this.personnelService.remove(id);
 
     // 返回自定义响应结构
     return {
@@ -150,10 +148,10 @@ export class UserController {
     }
 
     // 查询符合条件的用户；如果 filter 为空，则查询所有
-    const users = await this.userService.findAll(1, 10000, filter);
+    const users = await this.personnelService.findAll(1, 10000, filter);
 
     // 调用服务层的 extractFieldDescriptions 方法获取字段描述
-    const fieldMap = this.userService.extractFieldDescriptions();
+    const fieldMap = this.personnelService.extractFieldDescriptions();
 
     // 准备导出数据
     const data = users.map((user) => {

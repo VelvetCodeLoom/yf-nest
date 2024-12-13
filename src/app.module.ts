@@ -4,8 +4,8 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { config } from './config/index';
 import { User, UserSchema } from './scheme/user.schema';
+import { Personnel, PersonnelSchema } from './scheme/personnel.schema';
 import { Token, TokenSchema } from './scheme/token.schema';
-import { UserModule } from './user/user.module';
 import { TokenProvider } from './provider/token/token.provider';
 import { SettingProvider } from './provider/setting/setting.provider';
 import { Setting, SettingSchema } from './scheme/setting.schema';
@@ -16,6 +16,7 @@ import { TokenController } from './controller/admin/token/token.controller';
 import { InitProvider } from './provider/init/init.provider';
 import { JwtModule } from '@nestjs/jwt';
 import { initJwt } from './utils/initJwt';
+import { PersonnelModule } from './personnel/personnel.module';
 @Module({
   imports: [
     MongooseModule.forRoot(config.mongoUrl, {
@@ -26,7 +27,6 @@ import { initJwt } from './utils/initJwt';
       { name: Setting.name, schema: SettingSchema },
       { name: Token.name, schema: TokenSchema },
     ]),
-    UserModule,
     JwtModule.registerAsync({
       useFactory: async () => {
         return {
@@ -37,6 +37,7 @@ import { initJwt } from './utils/initJwt';
         };
       },
     }),
+    PersonnelModule,
   ],
   controllers: [AppController, TokenController],
   providers: [

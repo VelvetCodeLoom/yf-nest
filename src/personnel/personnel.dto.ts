@@ -2,7 +2,7 @@ import { IsString, IsInt, IsNotEmpty, IsOptional, Matches } from 'class-validato
 import { ApiProperty } from '@nestjs/swagger';
 
 // 创建用户 DTO
-export class CreateUserDto {
+export class CreatePersonnelDto {
   @ApiProperty({ description: '用户名', example: 'JohnDoe' })
   @IsString({ message: '用户名必须是字符串' })
   @IsNotEmpty({ message: '用户名是必填项' })
@@ -60,7 +60,7 @@ export class CreateUserDto {
 }
 
 // 更新用户 DTO
-export class UpdateUserDto {
+export class UpdatePersonnelDto {
   @ApiProperty({ description: '用户名', example: 'JohnDoe', required: false })
   @IsString()
   @IsOptional()
@@ -121,7 +121,7 @@ export class UpdateUserDto {
   @IsOptional()
   remark?: string;
 }
-export class FindUsersQuery {
+export class FindPersonnelQuery {
   @ApiProperty({ description: '当前页', example: 1 })
   @IsInt()
   page: number;

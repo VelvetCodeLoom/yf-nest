@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from '../scheme/user.schema';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { Personnel } from '../scheme/personnel.schema';
+import { CreatePersonnelDto, UpdatePersonnelDto } from './personnel.dto';
 import moment from 'moment';
 import { makeSalt, encryptPassword } from 'src/utils/crypto';
 @Injectable()
-export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+export class PersonnelService {
+  constructor(@InjectModel(Personnel.name) private userModel: Model<Personnel>) {}
   /**
    *  * 提取表中的字段中的描述信息-给导出excel使用
    * @returns
@@ -26,7 +26,7 @@ export class UserService {
   }
 
   // 创建用户方法
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreatePersonnelDto): Promise<Personnel> {
     try {
       // 解析并验证预约日期的格式
       const parsedDate = new Date(createUserDto.appointmentDate);
@@ -54,7 +54,7 @@ export class UserService {
   }
 
   // 查询所有用户并返回格式化后的日期
-  async findAll(page: number = 1, limit: number = 10, filter: any = {}): Promise<User[]> {
+  async findAll(page: number = 1, limit: number = 10, filter: any = {}): Promise<Personnel[]> {
     const skip = (page - 1) * limit;
     const users = await this.userModel
       .find(filter) // 根据筛选条件查询
@@ -76,7 +76,7 @@ export class UserService {
   }
 
   // 更新用户方法
-  async updateUser(updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUser(updateUserDto: UpdatePersonnelDto): Promise<Personnel> {
     const { id, ...updateData } = updateUserDto; // 分离 id 和其他更新字段
 
     // 如果没有提供 isArrived，默认值为 0
