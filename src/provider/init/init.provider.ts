@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { version } from '../../utils/loadConfig';
 import { encryptPassword, makeSalt } from 'src/utils/crypto';
+import { UserDocument } from 'src/scheme/user.schema';
+import { InitDto } from 'src/types/init.dto';
 import { CacheProvider } from '../cache/cache.provider';
 import { SettingProvider } from '../setting/setting.provider';
 import fs from 'fs';
@@ -13,7 +15,27 @@ export class InitProvider {
   constructor(
     private readonly cacheProvider: CacheProvider,
     private readonly settingProvider: SettingProvider,
+    @InjectModel('User') private userModel: Model<UserDocument>,
   ) {}
+  async init(initDto: InitDto) {
+    console.log('initDto: ', initDto);
+    const { user } = initDto;
+    try {
+      const salt = makeSalt();
+      await this.userModel.create({
+        id: 0,
+        name: user.username,
+        password: encryptPassword(user.username, user.password, salt),
+        mickname: user?.nickname || user.username,
+        type: 'admin',
+        salt,
+      });
+
+      return '初始化成功00!';
+    } catch (err) {
+      throw new BadRequestException('初始化失败');
+    }
+  }
   async initRestoreKey() {
     const key = makeSalt();
     await this.cacheProvider.set('restoreKey', key);
@@ -26,6 +48,13 @@ export class InitProvider {
     this.logger.warn(
       `忘记密码恢复密钥为： ${key}\n 注意此密钥也会同时写入到日志目录中的 restore.key 文件中，每次重启 服务 或老密钥被使用时都会重新生成此密钥`,
     );
+  }
+  async checkHasInited() {
+    const user = await this.userModel.findOne({}).exec();
+    if (!user) {
+      return false;
+    }
+    return true;
   }
   async initVersion() {
     if (!version || version == 'dev') {

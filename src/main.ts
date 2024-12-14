@@ -16,7 +16,7 @@ import { initJwt } from './utils/initJwt';
 async function bootstrap() {
   const jwtSecret = await initJwt();
   global.jwtSecret = jwtSecret;
-  const port = 3000;
+  const port = 3333;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(json({ limit: '50mb' }));
 
@@ -39,18 +39,18 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, document);
 
   // 设置全局校验管道
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // 自动剔除 DTO 中未声明的字段
-      forbidNonWhitelisted: true, // 如果传入未声明的字段，则抛出错误
-      transform: true, // 自动转换类型
-      exceptionFactory: (errors) => {
-        return new BadRequestException(
-          errors.map((e) => `${e.property}: ${Object.values(e.constraints).join(', ')}`).join('; '),
-        );
-      },
-    }),
-  );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true, // 自动剔除 DTO 中未声明的字段
+  //     forbidNonWhitelisted: true, // 如果传入未声明的字段，则抛出错误
+  //     transform: true, // 自动转换类型
+  //     exceptionFactory: (errors) => {
+  //       return new BadRequestException(
+  //         errors.map((e) => `${e.property}: ${Object.values(e.constraints).join(', ')}`).join('; '),
+  //       );
+  //     },
+  //   }),
+  // );
 
   // 设置全局异常过滤器
   app.useGlobalFilters(new HttpExceptionFilter());

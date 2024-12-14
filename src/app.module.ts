@@ -20,6 +20,7 @@ import { JwtStrategy } from './provider/auth/jwt.strategy';
 import { PersonnelModule } from './personnel/personnel.module';
 import { UserProvider } from './provider/user/user.provider';
 import { AuthController } from './controller/admin/auth/auth.controller';
+import { InitController } from './controller/admin/init/init.controller';
 @Module({
   imports: [
     MongooseModule.forRoot(config.mongoUrl, {
@@ -42,7 +43,7 @@ import { AuthController } from './controller/admin/auth/auth.controller';
     }),
     PersonnelModule,
   ],
-  controllers: [AppController, AuthController, TokenController],
+  controllers: [AppController, AuthController, TokenController, InitController],
   providers: [
     AppService,
     TokenProvider,
