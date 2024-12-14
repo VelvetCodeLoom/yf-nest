@@ -1,9 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { TokenProvider } from '../token/token.provider';
+import { UserProvider } from '../user/user.provider';
 
 @Injectable()
 export class AuthProvider {
-  constructor(private readonly tokenProvider: TokenProvider) {}
+  constructor(
+    private readonly usersService: UserProvider,
+    private readonly tokenProvider: TokenProvider,
+  ) {}
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.usersService.validateUser(username, pass);
+    if (user) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
 
   async login(user: any) {
     const payload = {

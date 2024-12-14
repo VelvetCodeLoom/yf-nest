@@ -11,6 +11,7 @@ import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { InitProvider } from './provider/init/init.provider';
+import { UserProvider } from './provider/user/user.provider';
 import { initJwt } from './utils/initJwt';
 async function bootstrap() {
   const jwtSecret = await initJwt();
@@ -59,6 +60,10 @@ async function bootstrap() {
   const initProvider = app.get(InitProvider);
   initProvider.initVersion();
   initProvider.initRestoreKey();
+
+  const userProvider = app.get(UserProvider);
+  // 老版本没加盐的用户数据洗一下。
+  userProvider.washUserWithSalt();
   // 启动日志
   setTimeout(() => {
     LoggerService.log('appStart', {

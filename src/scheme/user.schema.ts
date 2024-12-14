@@ -1,41 +1,38 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Permission } from 'src/types/access/access';
+export type UserType = 'admin' | 'collaborator';
+export type UserDocument = User & Document;
 
-@Schema({ timestamps: true })
+@Schema()
 export class User extends Document {
-  @Prop({ required: true, description: '姓名' })
+  @Prop({ index: true, unique: true })
+  id: number;
+
+  @Prop({ index: true })
   name: string;
 
-  @Prop({ required: false, description: '微信名' })
-  weChatName: string;
+  @Prop()
+  password: string;
 
-  @Prop({ required: false, description: '年龄' })
-  age: number;
+  @Prop({
+    default: () => {
+      return new Date();
+    },
+  })
+  createdAt: Date;
 
-  @Prop({ required: false, description: '地址' })
-  address: string;
+  @Prop({ index: true })
+  type: UserType;
 
-  @Prop({ required: false, description: '电话' })
-  phone: string;
+  @Prop()
+  nickname?: string;
 
-  // 日期信息
-  @Prop({ required: true, description: '预约日期' })
-  appointmentDate: string;
+  @Prop()
+  permissions?: Permission[];
 
-  // 状态字段
-  @Prop({ type: Number, enum: [0, 1], default: 0, description: '是否到店' })
-  isArrived: number; // 0: 否, 1: 是
-
-  @Prop({ type: Number, enum: [0, 1], default: 0, description: '是否转账' })
-  isTransferred: number; // 0: 否, 1: 是
-
-  @Prop({ type: Number, enum: [0, 1], default: 0, description: '是否领取' })
-  isReceived: number; // 0: 否, 1: 是
-
-  @Prop({ type: Number, default: null, description: '领取金额' })
-  receivedAmount: number | null;
-  @Prop({ required: false, description: '备注' })
-  remark: string; // 备注
+  @Prop({ index: true })
+  salt: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

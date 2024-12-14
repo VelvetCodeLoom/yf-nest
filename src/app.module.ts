@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { config } from './config/index';
 import { User, UserSchema } from './scheme/user.schema';
-import { Personnel, PersonnelSchema } from './scheme/personnel.schema';
 import { Token, TokenSchema } from './scheme/token.schema';
 import { TokenProvider } from './provider/token/token.provider';
 import { SettingProvider } from './provider/setting/setting.provider';
@@ -16,7 +15,11 @@ import { TokenController } from './controller/admin/token/token.controller';
 import { InitProvider } from './provider/init/init.provider';
 import { JwtModule } from '@nestjs/jwt';
 import { initJwt } from './utils/initJwt';
+import { LocalStrategy } from './provider/auth/local.strategy';
+import { JwtStrategy } from './provider/auth/jwt.strategy';
 import { PersonnelModule } from './personnel/personnel.module';
+import { UserProvider } from './provider/user/user.provider';
+import { AuthController } from './controller/admin/auth/auth.controller';
 @Module({
   imports: [
     MongooseModule.forRoot(config.mongoUrl, {
@@ -39,7 +42,7 @@ import { PersonnelModule } from './personnel/personnel.module';
     }),
     PersonnelModule,
   ],
-  controllers: [AppController, TokenController],
+  controllers: [AppController, AuthController, TokenController],
   providers: [
     AppService,
     TokenProvider,
@@ -48,6 +51,9 @@ import { PersonnelModule } from './personnel/personnel.module';
     LogProvider,
     CacheProvider,
     InitProvider,
+    LocalStrategy,
+    JwtStrategy,
+    UserProvider,
   ],
 })
 export class AppModule {}
