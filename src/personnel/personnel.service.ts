@@ -35,7 +35,7 @@ export class PersonnelService {
       }
 
       // 格式化日期为字符串格式（例如：'YYYY-MM-DD HH:mm:ss'）
-      const formattedDate = moment(parsedDate).format('YYYY-MM-DD HH:mm:ss');
+      const formattedDate = moment(parsedDate, 'YYYY-MM-D HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
 
       // 如果没有传递 isArrived，则默认设置为 0
       const { isArrived = 0 } = createUserDto;
@@ -65,7 +65,9 @@ export class PersonnelService {
     // 格式化查询结果中的 appointmentDate 字段
     return users.map((user) => {
       if (user.appointmentDate) {
-        user.appointmentDate = moment(user.appointmentDate).format('YYYY-MM-DD HH:mm:ss'); // 格式化为字符串
+        user.appointmentDate = moment(user.appointmentDate, 'YYYY-MM-D HH:mm:ss').format(
+          'YYYY-MM-DD HH:mm:ss',
+        );
       }
       return user;
     });
@@ -94,9 +96,10 @@ export class PersonnelService {
 
     // 格式化 appointmentDate 字段
     if (updatedUser.appointmentDate) {
-      updatedUser.appointmentDate = moment(updatedUser.appointmentDate).format(
-        'YYYY-MM-DD HH:mm:ss',
-      ); // 格式化为 'YYYY-MM-DD HH:mm:ss'
+      updatedUser.appointmentDate = moment(
+        updatedUser.appointmentDate,
+        'YYYY-MM-D HH:mm:ss',
+      ).format('YYYY-MM-DD HH:mm:ss'); // 格式化为 'YYYY-MM-DD HH:mm:ss'
     }
     return updatedUser;
   }

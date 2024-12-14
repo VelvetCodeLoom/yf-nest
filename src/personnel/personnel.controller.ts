@@ -21,7 +21,7 @@ import { ApiToken } from 'src/provider/swagger/token';
 import { AdminGuard } from 'src/provider/auth/auth.guard';
 @ApiTags('personnel')
 @Controller('personnel')
-@UseGuards(...AdminGuard)
+// @UseGuards(...AdminGuard)
 @ApiToken
 export class PersonnelController {
   constructor(private readonly personnelService: PersonnelService) {}
