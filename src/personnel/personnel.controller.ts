@@ -9,6 +9,7 @@ import {
   Query,
   HttpCode,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import moment from 'moment';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -16,8 +17,12 @@ import * as XLSX from 'xlsx';
 import { Response } from 'express';
 import { PersonnelService } from './personnel.service';
 import { CreatePersonnelDto, UpdatePersonnelDto, FindPersonnelQuery } from './personnel.dto';
+import { ApiToken } from 'src/provider/swagger/token';
+import { AdminGuard } from 'src/provider/auth/auth.guard';
 @ApiTags('personnel')
 @Controller('personnel')
+@UseGuards(...AdminGuard)
+@ApiToken
 export class PersonnelController {
   constructor(private readonly personnelService: PersonnelService) {}
   @Post('add')

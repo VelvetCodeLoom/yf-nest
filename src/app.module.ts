@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -21,6 +21,7 @@ import { PersonnelModule } from './personnel/personnel.module';
 import { UserProvider } from './provider/user/user.provider';
 import { AuthController } from './controller/admin/auth/auth.controller';
 import { InitController } from './controller/admin/init/init.controller';
+@Global() // 这里使用 @Global() 装饰器
 @Module({
   imports: [
     MongooseModule.forRoot(config.mongoUrl, {
@@ -56,5 +57,6 @@ import { InitController } from './controller/admin/init/init.controller';
     JwtStrategy,
     UserProvider,
   ],
+  exports: [TokenProvider, JwtModule], // 导出 JwtModule 和 TokenProvider，使得其他模块可使用
 })
 export class AppModule {}
