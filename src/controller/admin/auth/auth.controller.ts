@@ -19,7 +19,6 @@ import { LoginGuard } from 'src/provider/auth/login.guard';
 import { TokenProvider } from 'src/provider/token/token.provider';
 import { CacheProvider } from 'src/provider/cache/cache.provider';
 import { InitProvider } from 'src/provider/init/init.provider';
-// import { PipelineProvider } from 'src/provider/pipeline/pipeline.provider';
 import { ApiToken } from 'src/provider/swagger/token';
 
 @ApiTags('tag')
@@ -32,8 +31,7 @@ export class AuthController {
     private readonly tokenProvider: TokenProvider,
     private readonly cacheProvider: CacheProvider,
     private readonly initProvider: InitProvider,
-  ) // private readonly pipelineProvider: PipelineProvider,
-  {}
+  ) {}
 
   @UseGuards(LoginGuard, AuthGuard('local'))
   @Post('/login')
@@ -48,7 +46,6 @@ export class AuthController {
     // 能到这里登陆就成功了
     this.logProvider.login(request, true);
     const data = await this.authProvider.login(request.user);
-    // this.pipelineProvider.dispatchEvent('login', data);
     return {
       statusCode: 200,
       data,

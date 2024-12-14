@@ -18,7 +18,6 @@ export class InitProvider {
     @InjectModel('User') private userModel: Model<UserDocument>,
   ) {}
   async init(initDto: InitDto) {
-    console.log('initDto: ', initDto);
     const { user } = initDto;
     try {
       const salt = makeSalt();
@@ -31,7 +30,7 @@ export class InitProvider {
         salt,
       });
 
-      return '初始化成功00!';
+      return '初始化成功!';
     } catch (err) {
       throw new BadRequestException('初始化失败');
     }
