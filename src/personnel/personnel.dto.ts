@@ -135,6 +135,11 @@ export class FindPersonnelQuery {
   @IsString()
   name?: string;
 
+  @ApiProperty({ description: '微信名' })
+  @IsOptional()
+  @IsString()
+  weChatName?: string;
+
   @ApiProperty({ description: '电话号码' })
   @IsOptional()
   @IsString()

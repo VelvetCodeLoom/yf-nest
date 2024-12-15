@@ -21,7 +21,7 @@ import { ApiToken } from 'src/provider/swagger/token';
 import { AdminGuard } from 'src/provider/auth/auth.guard';
 @ApiTags('personnel')
 @Controller('personnel')
-// @UseGuards(...AdminGuard)
+@UseGuards(...AdminGuard)
 @ApiToken
 export class PersonnelController {
   constructor(private readonly personnelService: PersonnelService) {}
@@ -45,6 +45,7 @@ export class PersonnelController {
       page = 1,
       limit = 10,
       name,
+      weChatName,
       phone,
       appointmentDate,
       isArrived,
@@ -58,15 +59,28 @@ export class PersonnelController {
     if (name) {
       filter.name = new RegExp(name, 'i'); // 模糊查询
     }
+    if (weChatName) {
+      filter.weChatName = new RegExp(weChatName, 'i'); // 模糊查询
+    }
 
     if (phone) {
       filter.phone = phone;
     }
-
     if (appointmentDate) {
-      const startOfDay = moment(appointmentDate).startOf('day').format('YYYY-MM-DD HH:mm:ss');
-      const endOfDay = moment(appointmentDate).endOf('day').format('YYYY-MM-DD HH:mm:ss');
-      filter.appointmentDate = { $gte: startOfDay, $lte: endOfDay };
+      // 检查是否包含时分秒
+      const momentDate = moment(appointmentDate, 'YYYY-MM-DD HH:mm:ss', true); // true表示严格匹配
+      if (momentDate.isValid() && momentDate.hours() !== 0) {
+        // 如果包含时分秒，直接使用 appointmentDate
+        filter.appointmentDate = {
+          $gte: momentDate.format('YYYY-MM-DD HH:mm:ss'),
+          $lte: momentDate.format('YYYY-MM-DD HH:mm:ss'),
+        };
+      } else {
+        // 如果没有时分秒，按照你的逻辑查找当天的起始和结束时间
+        const startOfDay = moment(appointmentDate).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+        const endOfDay = moment(appointmentDate).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+        filter.appointmentDate = { $gte: startOfDay, $lte: endOfDay };
+      }
     }
 
     if (isArrived) {
