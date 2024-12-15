@@ -22,7 +22,7 @@ import { InitProvider } from 'src/provider/init/init.provider';
 import { ApiToken } from 'src/provider/swagger/token';
 
 @ApiTags('tag')
-@Controller('/api/admin/auth/')
+@Controller('/admin/auth/')
 export class AuthController {
   constructor(
     private readonly authProvider: AuthProvider,

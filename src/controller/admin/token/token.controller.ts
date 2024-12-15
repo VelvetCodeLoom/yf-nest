@@ -8,7 +8,7 @@ import { ApiToken } from 'src/provider/swagger/token';
 @ApiTags('token')
 @UseGuards(...AdminGuard)
 @ApiToken
-@Controller('/api/admin/token/')
+@Controller('/admin/token/')
 export class TokenController {
   constructor(private readonly tokenProvider: TokenProvider) {}
 

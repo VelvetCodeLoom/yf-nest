@@ -15,7 +15,7 @@ import { ApiToken } from 'src/provider/swagger/token';
 
 @ApiTags('init')
 @ApiToken
-@Controller('/api/admin')
+@Controller('/admin')
 export class InitController {
   constructor(private readonly initProvider: InitProvider) {}
 
